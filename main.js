@@ -86,7 +86,7 @@ function renderGallery() {
                     <h3>${art.title}</h3>
                     <p>by ${art.artist}</p>
                     <div class="art-footer">
-                        <span class="price">$${art.price.toLocaleString()}</span>
+                        <span class="price">₹${art.price.toLocaleString('en-IN')}</span>
                         <button class="add-btn" onclick="event.stopPropagation(); addToCart(${art.id})">Add to Collection</button>
                     </div>
                 </div>
@@ -145,14 +145,14 @@ function updateCartUI() {
                 <img src="${item.image}" alt="${item.title}">
                 <div class="cart-item-info">
                     <h4>${item.title}</h4>
-                    <p>$${item.price.toLocaleString()}</p>
+                    <p>₹${item.price.toLocaleString('en-IN')}</p>
                     <span class="remove-btn" onclick="removeFromCart(${item.id})">Remove</span>
                 </div>
             </div>
         `).join('');
     
     const total = cart.reduce((sum, item) => sum + item.price, 0);
-    if (cartTotal) cartTotal.innerText = `$${total.toLocaleString()}`;
+    if (cartTotal) cartTotal.innerText = `₹${total.toLocaleString('en-IN')}`;
 }
 
 // Checkout Navigation
@@ -209,7 +209,7 @@ window.openProductModal = (id) => {
     document.getElementById('modal-title').innerText = art.title;
     document.getElementById('modal-artist').innerText = art.artist;
     document.getElementById('modal-desc').innerText = art.description;
-    document.getElementById('modal-price').innerText = `$${art.price.toLocaleString()}`;
+    document.getElementById('modal-price').innerText = `₹${art.price.toLocaleString('en-IN')}`;
     
     const addBtn = document.getElementById('modal-add-btn');
     addBtn.onclick = () => {
@@ -332,6 +332,65 @@ document.addEventListener('mousemove', (e) => {
     img.style.transform = `scale(1.1) translate(${moveX}px, ${moveY}px)`;
 });
 
+// Hero Carousel Logic
+let currentSlide = 0;
+const carouselTrack = document.querySelector('.carousel-track');
+const carouselDots = document.getElementById('carousel-dots');
+const heroTitle = document.getElementById('hero-title');
+const heroSubtitle = document.getElementById('hero-subtitle');
+
+function initHeroCarousel() {
+    if (!carouselTrack) return;
+    
+    // Use paintings for slides
+    const carouselPaintings = paintings.slice(0, 3); // Take first 3 for carousel
+    
+    carouselTrack.innerHTML = carouselPaintings.map((p, i) => `
+        <div class="carousel-slide ${i === 0 ? 'active' : ''}">
+            <img src="${p.image}" alt="${p.title}">
+        </div>
+    `).join('');
+    
+    carouselDots.innerHTML = carouselPaintings.map((_, i) => `
+        <div class="dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></div>
+    `).join('');
+    
+    setInterval(nextSlide, 5000);
+}
+
+function nextSlide() {
+    currentSlide = (currentSlide + 1) % 3;
+    updateCarousel();
+}
+
+window.goToSlide = (index) => {
+    currentSlide = index;
+    updateCarousel();
+};
+
+function updateCarousel() {
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.dot');
+    const carouselPaintings = paintings.slice(0, 3);
+    const activePainting = carouselPaintings[currentSlide];
+
+    carouselTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
+    
+    slides.forEach((s, i) => s.classList.toggle('active', i === currentSlide));
+    dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+    
+    // Update text content with fade effect
+    heroTitle.style.opacity = '0';
+    heroSubtitle.style.opacity = '0';
+    
+    setTimeout(() => {
+        heroTitle.innerHTML = `Exquisite <span>${activePainting.title}</span>`;
+        heroSubtitle.innerText = activePainting.description.substring(0, 100) + '...';
+        heroTitle.style.opacity = '1';
+        heroSubtitle.style.opacity = '1';
+    }, 400);
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
@@ -339,4 +398,5 @@ document.addEventListener('DOMContentLoaded', () => {
     renderArtists();
     updateCartUI();
     observeScroll();
+    initHeroCarousel();
 });

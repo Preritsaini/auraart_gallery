@@ -31,13 +31,20 @@
             </div>
         </nav>
 
-        <header class="hero">
-            <div class="hero-content">
-                <h1 class="fade-in">Elevate Your Space with <span>Masterpieces</span></h1>
-                <p class="fade-in-delay">Curated collection of original oil paintings for the modern connoisseur.</p>
-                <a href="#gallery" class="btn btn-primary fade-in-delay-2">Explore Gallery</a>
+        <header class="hero" id="hero-carousel">
+            <div class="carousel-track">
+                <!-- Slides injected by JS -->
             </div>
-            <div class="hero-bg-accent"></div>
+            <div class="hero-overlay">
+                <div class="hero-content">
+                    <h1 class="fade-in" id="hero-title">Elevate Your Space with <span>Masterpieces</span></h1>
+                    <p class="fade-in-delay" id="hero-subtitle">Curated collection of original oil paintings for the modern connoisseur.</p>
+                    <a href="#gallery" class="btn btn-primary fade-in-delay-2">Explore Gallery</a>
+                </div>
+            </div>
+            <div class="carousel-indicators" id="carousel-dots">
+                <!-- Dots injected by JS -->
+            </div>
         </header>
 
         <main>
@@ -131,7 +138,7 @@
                             Detailed description goes here...
                         </div>
                         <div class="modal-footer">
-                            <span class="modal-price" id="modal-price">$0,000</span>
+                            <span class="modal-price" id="modal-price">₹0,000</span>
                             <button class="btn btn-primary modal-add-btn" id="modal-add-btn">Add to Collection</button>
                         </div>
                     </div>
@@ -145,7 +152,7 @@
                 <div id="cart-content">
                     <div id="cart-items" class="cart-items"></div>
                     <div class="cart-footer">
-                        <div class="total">Total: <span id="cart-total">$0</span></div>
+                        <div class="total">Total: <span id="cart-total">₹0</span></div>
                         <button class="btn btn-primary checkout-btn" id="start-checkout">Proceed to Checkout</button>
                     </div>
                 </div>
